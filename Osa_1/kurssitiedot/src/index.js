@@ -51,6 +51,7 @@ const App = () => {
             <Total totalExercises={exercises1 + exercises2 + exercises3}/>
         </div>
     )
+    
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));
