@@ -11,20 +11,34 @@ const Button = (props) => {
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
-  console.log(anecdotes);
-  console.log(selected);
+  const [votesArray, setVotes] = useState(Array.apply(null, new Array(anecdotes.length)).map(Number.prototype.valueOf, 0));
 
   const handleClick = () => {
     const randomAnecdote = anecdotes[Math.floor(Math.random()*anecdotes.length)];
-    console.log(randomAnecdote);
     setSelected(anecdotes.indexOf(randomAnecdote));
   }
-  
+
+  const handleVote = () => {
+    const copyVotes = [...votesArray];
+    copyVotes[selected] += 1;
+    setVotes(copyVotes);
+  }
+
+  // Finding the higest number of votes from the array:
+  const highestVote = Math.max.apply(null, votesArray);
+  // Finding the index of anecdote with most votes:
+  const mostVotedIndex = votesArray.indexOf(highestVote);
+
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{props.anecdotes[selected]}</p>
+      <Button onClick={handleVote} text={'Vote for this anecdote'}/>
       <Button onClick={handleClick} text={'next anecdote'}/>
-      <p>{props.randomAnecdote}</p>
+      <h1>Anecdote with the most votes</h1>
+      <p>The most voted anecdote with {highestVote} votes is: <br />
+        {props.anecdotes[mostVotedIndex]}
+      </p>
     </div>
   )
 }
@@ -37,8 +51,6 @@ const anecdotes = [
   'Premature optimization is the root of all evil.',
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
-
-
 
 ReactDOM.render(
   <App anecdotes={anecdotes} />,
