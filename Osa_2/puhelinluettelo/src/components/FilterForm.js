@@ -1,13 +1,13 @@
 import React from 'react';
 
-const FilterForm = (props) => {
+const FilterForm = ({ labelText, value, onChange }) => {
   return(
     <div>
       <label>
-        {props.labelText}
+        {labelText}
         <input
-          value={props.value}
-          onChange={props.onChange}
+          value={value}
+          onChange={onChange}
         />
       </label>
     </div>

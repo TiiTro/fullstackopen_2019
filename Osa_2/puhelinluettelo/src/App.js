@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Contact from './components/Contact';
 import FilterForm from './components/FilterForm';
+import NewContactForm from './components/NewContactForm';
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -13,6 +14,8 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
 
+
+  /// filtering added contacts
   const handleFilter = (event) => {
     setFilter(event.target.value);
     console.log(filter);
@@ -24,6 +27,7 @@ const App = () => {
     }
   );
 
+  /// adding new contacts
   const addInfo = (event) => {
     event.preventDefault();
     console.log('Lisätään:', newName, newNumber);
@@ -31,26 +35,14 @@ const App = () => {
       name: newName,
       number: newNumber
     }
+   
+    console.log(contactObject);
+    console.log(persons);
 
-    // console.log(persons);
-
-    // function removeDuplicates(persons) {
-    //   let unique = {};
-    //   persons.forEach(function(p) {
-    //     person.name === contactObject.name ?
-    //   })
-    // }
-
-    // persons.forEach(function(person){
-    //   console.log(person.name, contactObject.name);
-    //   person.name === contactObject.name ?
-    //     setPersons(persons)
-    //     window.alert(`${person.name} is already added to the phonebook`)
-    //     : setPersons(persons.concat(contactObject));
-    // })
     setPersons(persons.concat(contactObject));
+    
     setNewName('');
-    setNewNumber('')
+    setNewNumber('');
   }
 
   const handleNewName = (event) => {
@@ -62,8 +54,6 @@ const App = () => {
     console.log(event.target.value);
     setNewNumber(event.target.value);
   }
-
-  console.log(persons);
 
   const contacts = () => filteredContacts.map(person => 
     <Contact 
@@ -81,36 +71,23 @@ const App = () => {
           value={filter}
           onChange={handleFilter}
         />
-      <h3>Add a new contact</h3>
-      <form onSubmit={addInfo}>
-        <div>
-          <label>
-            Name:
-            <input
-              value={newName}
-              onChange={handleNewName}
-            />
-          </label>
-          <br />
-          <label>
-            Number:
-            <input
-              value={newNumber}
-              onChange={handleNewNumber}
-            />
-          </label>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+        <NewContactForm
+          header={'Add a new contact'}
+          onSubmit={addInfo}
+          handleNewName={handleNewName}
+          handleNewNumber={handleNewNumber}
+          addInfo={addInfo}
+          setNewName={setNewName}
+          setNewNumber={setNewNumber}
+          newName={newName}
+          newNumber={newNumber}
+        />
       <h3>Numbers</h3>
       <div>
         {contacts()}
       </div>
     </div>
   )
-
 }
 
 export default App;
