@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Contact from './components/Contact';
 import FilterForm from './components/FilterForm';
 import NewContactForm from './components/NewContactForm';
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+  const [persons, setPersons] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
 
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log(response.data);
+        setPersons(response.data);
+      })
+  }, [])
+
+  console.log('render', persons.length, 'contacts');
 
   /// filtering added contacts
   const handleFilter = (event) => {
@@ -31,6 +38,8 @@ const App = () => {
   const addInfo = (event) => {
     event.preventDefault();
     console.log('Lisätään:', newName, newNumber);
+
+    
     const contactObject = {
       name: newName,
       number: newNumber
@@ -39,7 +48,12 @@ const App = () => {
     console.log(contactObject);
     console.log(persons);
 
-    setPersons(persons.concat(contactObject));
+    persons.forEach(function(person){
+      console.log(person.name, contactObject.name);
+      person.name === contactObject.name ?
+        window.alert(`${person.name} is already added to the phonebook`)
+        : setPersons(persons.concat(contactObject));
+    })
     
     setNewName('');
     setNewNumber('');
