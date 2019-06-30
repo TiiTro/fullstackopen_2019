@@ -39,24 +39,21 @@ const App = () => {
     event.preventDefault();
     console.log('Lisätään:', newName, newNumber);
 
-    
-    const contactObject = {
-      name: newName,
-      number: newNumber
-    }
-   
-    console.log(contactObject);
-    console.log(persons);
+    const dublicateNames = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
 
-    persons.forEach(function(person){
-      console.log(person.name, contactObject.name);
-      person.name === contactObject.name ?
-        window.alert(`${person.name} is already added to the phonebook`)
-        : setPersons(persons.concat(contactObject));
-    })
-    
-    setNewName('');
-    setNewNumber('');
+    if (!dublicateNames) {
+      const contactObject = {
+        name: newName,
+        number: newNumber
+      }
+      setPersons(persons.concat(contactObject));
+      setNewName('');
+      setNewNumber('');
+    } else {
+      window.alert(`${newName} is already added to the phonebook`);
+      setNewName('');
+      setNewNumber('');
+    }
   }
 
   const handleNewName = (event) => {
