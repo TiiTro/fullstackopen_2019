@@ -1,12 +1,17 @@
 import React from 'react';
+import Button from './Button';
 
-const Contact = (props) => {
+const Contact = ({ name, number, onClick }) => {
+  
   return(
     <div>
-      <p>{props.name} {props.number}</p>
+      <p>{name} {number}</p>
+      <Button 
+        text={'Delete'}
+        onClick={onClick}
+      />
     </div>
   )
 }
-
 
 export default Contact;

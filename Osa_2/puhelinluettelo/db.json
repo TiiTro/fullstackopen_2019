@@ -16,42 +16,7 @@
       "id": 3
     },
     {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": 4
-    },
-    {
       "id": 5
-    },
-    {
-      "name": "liisa",
-      "number": "123",
-      "id": 6
-    },
-    {
-      "name": "sanna",
-      "number": "3456791",
-      "id": 7
-    },
-    {
-      "name": "Risto Reipas",
-      "number": "00000000",
-      "id": 8
-    },
-    {
-      "name": "Seija",
-      "number": "234567",
-      "id": 9
-    },
-    {
-      "name": "sauli",
-      "number": "12",
-      "id": 10
-    },
-    {
-      "name": "Kimmo",
-      "number": "234234234",
-      "id": 11
     }
   ]
 }

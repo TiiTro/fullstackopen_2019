@@ -5,7 +5,7 @@ import NewContactForm from './components/NewContactForm';
 import personService from './services/persons';
 
 const App = () => {
-  const [persons, setPersons] = useState([])
+  const [ persons, setPersons ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
@@ -19,7 +19,25 @@ const App = () => {
       })
   }, [])
 
-  console.log('render', persons.length, 'contacts');
+  console.log(persons);
+
+  // Deleting a contact from the server
+  const handleDelete = (person) => {
+    console.log('delete clicked')
+    const removeContact = persons.filter(p => p.id !== person.id)
+    const updatedContacts = {...removeContact}
+    console.log(updatedContacts);
+
+    window.confirm(`Are you sure you want to delete ${person.name}?`) ?
+      personService
+        .remove(person.id)
+        .then(
+          setPersons(updatedContacts))
+      : console.log('not removing');
+  }
+
+
+
 
   /// filtering added contacts
   const handleFilter = (event) => {
@@ -79,6 +97,7 @@ const App = () => {
       key={person.name}
       name={person.name}
       number={person.number}
+      onClick={() => handleDelete(person)}
     />
   )
 
