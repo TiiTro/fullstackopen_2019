@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Contact from './components/Contact';
 import FilterForm from './components/FilterForm';
 import NewContactForm from './components/NewContactForm';
+import personService from './services/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,11 +12,10 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log(response.data);
-        setPersons(response.data);
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons);
       })
   }, [])
 
@@ -30,7 +29,8 @@ const App = () => {
 
   let filteredContacts = persons.filter(
     (person) => {
-      return person.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1;
+      return person.name;
+      // return person.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1
     }
   );
 
@@ -39,7 +39,8 @@ const App = () => {
     event.preventDefault();
     console.log('Lisätään:', newName, newNumber);
 
-    const dublicateNames = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
+    const dublicateNames = persons.find(person => person.name === newName)
+    // const dublicateNames = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
 
     if (!dublicateNames) {
       const contactObject = {
@@ -49,6 +50,13 @@ const App = () => {
       setPersons(persons.concat(contactObject));
       setNewName('');
       setNewNumber('');
+
+      personService
+        .create(contactObject)
+        .then(newContact => {
+          console.log(newContact);
+      })
+
     } else {
       window.alert(`${newName} is already added to the phonebook`);
       setNewName('');
@@ -57,12 +65,12 @@ const App = () => {
   }
 
   const handleNewName = (event) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setNewName(event.target.value);
   }
 
   const handleNewNumber = (event) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setNewNumber(event.target.value);
   }
 
