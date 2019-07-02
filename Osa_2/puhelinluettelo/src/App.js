@@ -21,22 +21,19 @@ const App = () => {
 
   console.log(persons);
 
-  // Deleting a contact from the server
+  // // Deleting a contact from the server
   const handleDelete = (person) => {
     console.log('delete clicked')
-    const removeContact = persons.filter(p => p.id !== person.id)
-    const updatedContacts = {...removeContact}
-    console.log(updatedContacts);
 
     window.confirm(`Are you sure you want to delete ${person.name}?`) ?
       personService
         .remove(person.id)
-        .then(
-          setPersons(updatedContacts))
+        .then(response => {
+          const updatedContacts = persons.filter(p => p.id !== person.id);
+          setPersons(updatedContacts);
+        })          
       : console.log('not removing');
   }
-
-
 
 
   /// filtering added contacts
