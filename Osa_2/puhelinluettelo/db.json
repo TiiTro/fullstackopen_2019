@@ -2,7 +2,7 @@
   "persons": [
     {
       "name": "Arto Hellas",
-      "number": "040-123456",
+      "number": "050-12312312",
       "id": 1
     },
     {
@@ -17,6 +17,11 @@
     },
     {
       "id": 5
+    },
+    {
+      "name": "Salla",
+      "number": "123455667",
+      "id": 6
     }
   ]
 }

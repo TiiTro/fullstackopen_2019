@@ -72,11 +72,30 @@ const App = () => {
           console.log(newContact);
       })
 
-    } else {
-      window.alert(`${newName} is already added to the phonebook`);
-      setNewName('');
-      setNewNumber('');
+    } else if (dublicateNames){
+        // console.log(persons)
+        // console.log(newNumber, dublicateNames.number)
+        // console.log(dublicateNames)
+
+        if (dublicateNames.number !== newNumber) {
+          const updatedContact = {...dublicateNames, number: newNumber}
+
+          window.confirm(`${dublicateNames.name} is already added to the phonebook with the number ${dublicateNames.number}, replace it with ${newNumber}?`) ?            
+            personService
+              .update(dublicateNames.id, updatedContact)
+              .then(updatedPerson => {
+                console.log(updatedPerson)
+                console.log(persons)
+                  setPersons(persons.map(person => person.id !== updatedPerson.id ?
+                  person : updatedPerson));
+            })          
+          : console.log('not changing the number')
+        } else {
+          window.alert(`${dublicateNames.name} is already added to the phonebook`)
+        }
     }
+    setNewName('');
+    setNewNumber('');      
   }
 
   const handleNewName = (event) => {
