@@ -3,12 +3,14 @@ import Contact from './components/Contact';
 import FilterForm from './components/FilterForm';
 import NewContactForm from './components/NewContactForm';
 import personService from './services/persons';
+import Notification from './components/Notification';
 
 const App = () => {
   const [ persons, setPersons ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
+  const [ notification, setNotification] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -31,10 +33,13 @@ const App = () => {
         .then(response => {
           const updatedContacts = persons.filter(p => p.id !== person.id);
           setPersons(updatedContacts);
+          setNotification(`${person.name} has been removed from the phonebook`)
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
         })          
       : console.log('not removing');
   }
-
 
   /// filtering added contacts
   const handleFilter = (event) => {
@@ -62,14 +67,16 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-      setPersons(persons.concat(contactObject));
-      setNewName('');
-      setNewNumber('');
 
       personService
         .create(contactObject)
         .then(newContact => {
           console.log(newContact);
+          setPersons(persons.concat(contactObject))
+          setNotification(`${newContact.name} added to phonebook`)
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
       })
 
     } else if (dublicateNames){
@@ -86,8 +93,12 @@ const App = () => {
               .then(updatedPerson => {
                 console.log(updatedPerson)
                 console.log(persons)
-                  setPersons(persons.map(person => person.id !== updatedPerson.id ?
+                setPersons(persons.map(person => person.id !== updatedPerson.id ?
                   person : updatedPerson));
+                setNotification(`Number changed succesfully`)
+                setTimeout(() => {
+                  setNotification(null)
+                }, 5000)
             })          
           : console.log('not changing the number')
         } else {
@@ -120,6 +131,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+        <Notification 
+          message={notification}/>
         <FilterForm 
           labelText={'Filter contacts with'}
           value={filter}
