@@ -9,8 +9,9 @@ const App = () => {
   const [ persons, setPersons ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
-  const [ filter, setFilter ] = useState('')
+  const [ search, setSearch] = useState('')
   const [ notification, setNotification] = useState(null)
+  const [ notificationType, setNotificationType ] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -21,7 +22,7 @@ const App = () => {
       })
   }, [])
 
-  console.log(persons);
+  // console.log(persons);
 
   // // Deleting a contact from the server
   const handleDelete = (person) => {
@@ -34,6 +35,7 @@ const App = () => {
           const updatedContacts = persons.filter(p => p.id !== person.id);
           setPersons(updatedContacts);
           setNotification(`${person.name} has been removed from the phonebook`)
+          setNotificationType('success')
           setTimeout(() => {
             setNotification(null)
           }, 5000)
@@ -41,26 +43,12 @@ const App = () => {
       : console.log('not removing');
   }
 
-  /// filtering added contacts
-  const handleFilter = (event) => {
-    setFilter(event.target.value);
-    console.log(filter);
-  }
-
-  let filteredContacts = persons.filter(
-    (person) => {
-      return person.name;
-      // return person.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1
-    }
-  );
-
   /// adding new contacts
   const addInfo = (event) => {
     event.preventDefault();
     console.log('Lisätään:', newName, newNumber);
 
-    const dublicateNames = persons.find(person => person.name === newName)
-    // const dublicateNames = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
+    const dublicateNames = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
 
     if (!dublicateNames) {
       const contactObject = {
@@ -74,16 +62,13 @@ const App = () => {
           console.log(newContact);
           setPersons(persons.concat(contactObject))
           setNotification(`${newContact.name} added to phonebook`)
+          setNotificationType('success')
           setTimeout(() => {
             setNotification(null)
           }, 5000)
       })
 
     } else if (dublicateNames){
-        // console.log(persons)
-        // console.log(newNumber, dublicateNames.number)
-        // console.log(dublicateNames)
-
         if (dublicateNames.number !== newNumber) {
           const updatedContact = {...dublicateNames, number: newNumber}
 
@@ -96,10 +81,15 @@ const App = () => {
                 setPersons(persons.map(person => person.id !== updatedPerson.id ?
                   person : updatedPerson));
                 setNotification(`Number changed succesfully`)
+                setNotificationType('success')
                 setTimeout(() => {
                   setNotification(null)
                 }, 5000)
-            })          
+              })
+              .catch(error => {
+                setNotification(`Could not update number, contact has been removed from the server`)
+                setNotificationType('error')
+              })          
           : console.log('not changing the number')
         } else {
           window.alert(`${dublicateNames.name} is already added to the phonebook`)
@@ -119,6 +109,20 @@ const App = () => {
     setNewNumber(event.target.value);
   }
 
+  /// filtering added contacts
+  const handleFilter = (event) => {
+    setSearch(event.target.value);
+    console.log(search);
+  }
+
+  console.log(search);
+  console.log(persons);
+
+  const filteredContacts = persons.filter(person => {
+    console.log(person.name)
+    return person.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
+  });
+
   const contacts = () => filteredContacts.map(person => 
     <Contact 
       key={person.name}
@@ -132,10 +136,11 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
         <Notification 
-          message={notification}/>
+          message={notification}
+          type={notificationType}/>
         <FilterForm 
           labelText={'Filter contacts with'}
-          value={filter}
+          value={search}
           onChange={handleFilter}
         />
         <NewContactForm
