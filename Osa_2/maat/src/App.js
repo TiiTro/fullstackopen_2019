@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Input from'./components/Input';
 import axios from 'axios';
 import Country from './components/Country';
+// import Button from './components/Button';
+
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -16,9 +18,9 @@ function App() {
     });
   }, []);
 
-  console.log(countries);
+  // console.log(countries);
 
-  const handleChange = (event) => {
+  const handleFilter = (event) => {
     event.preventDefault();
     setFilter(event.target.value);
     console.log(filter);
@@ -36,13 +38,16 @@ function App() {
       )
       
     } else if (filteredCountries.length < 10 && filteredCountries.length > 1) {
-      console.log('less than ten', filteredCountries.length);
+      console.log('less than ten', filteredCountries.length, filteredCountries);
       return (
         filteredCountries.map(country =>
-          <li key={country.name}>{country.name}</li>
+          <li key={country.index} style={{listStyleType: 'none'}}>
+              {country.name}
+              <button onClick={() => setFilter(country.name)}>Show</button>
+          </li>
+        )  
       ) 
-    )} else {
-      console.log('one', filteredCountries.length);
+    } else {
       console.log('one', filteredCountries);
       return (
         filteredCountries.map(country =>
@@ -56,12 +61,12 @@ function App() {
         />
       )
     )}
-  }  
+  }
   
   return (
     <div>
       <Input
-        onChange={handleChange} 
+        onChange={handleFilter} 
         label={'Search for countries'}
       />
       <br/>
