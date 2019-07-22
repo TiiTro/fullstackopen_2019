@@ -1,10 +1,12 @@
 import React from 'react';
 
 function Input({ label, onChange }) {
+  
   return (
     <form>
       <label>
-        {label}<br/>
+        {label}
+        <br/>
         <input onChange={onChange}></input>
       </label>
     </form>
