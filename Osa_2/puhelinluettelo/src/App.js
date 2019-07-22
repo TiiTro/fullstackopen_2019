@@ -14,7 +14,6 @@ const App = () => {
   const [ notificationType, setNotificationType ] = useState(null)
 
   useEffect(() => {
-    console.log('effect')
     personService
       .getAll()
       .then(initialPersons => {
@@ -22,12 +21,8 @@ const App = () => {
       })
   }, [])
 
-  // console.log(persons);
-
   // // Deleting a contact from the server
   const handleDelete = (person) => {
-    console.log('delete clicked')
-
     window.confirm(`Are you sure you want to delete ${person.name}?`) ?
       personService
         .remove(person.id)
@@ -46,7 +41,6 @@ const App = () => {
   /// adding new contacts
   const addInfo = (event) => {
     event.preventDefault();
-    console.log('Lisätään:', newName, newNumber);
 
     const dublicateNames = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
 
@@ -59,7 +53,6 @@ const App = () => {
       personService
         .create(contactObject)
         .then(newContact => {
-          console.log(newContact);
           setPersons(persons.concat(contactObject))
           setNotification(`${newContact.name} added to phonebook`)
           setNotificationType('success')
@@ -76,8 +69,6 @@ const App = () => {
             personService
               .update(dublicateNames.id, updatedContact)
               .then(updatedPerson => {
-                console.log(updatedPerson)
-                console.log(persons)
                 setPersons(persons.map(person => person.id !== updatedPerson.id ?
                   person : updatedPerson));
                 setNotification(`Number changed succesfully`)
@@ -100,26 +91,19 @@ const App = () => {
   }
 
   const handleNewName = (event) => {
-    // console.log(event.target.value);
     setNewName(event.target.value);
   }
 
   const handleNewNumber = (event) => {
-    // console.log(event.target.value);
     setNewNumber(event.target.value);
   }
 
   /// filtering added contacts
   const handleFilter = (event) => {
     setSearch(event.target.value);
-    console.log(search);
   }
 
-  console.log(search);
-  console.log(persons);
-
   const filteredContacts = persons.filter(person => {
-    console.log(person.name)
     return person.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
   });
 

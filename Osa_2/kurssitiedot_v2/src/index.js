@@ -2,23 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Course from './components/Course'
 
-// const Courses = ({ courses }) => {
-//   console.log(courses);
-//   const mapCourses = () => courses.map(course =>
-//     <Course
-//       key={course.name}
-//       name={course.name}
-//       parts={course.parts}
-//     />
-//   )
-
-//   return(
-//     <div>
-//       {mapCourses()}
-//     </div>
-//   )
-// }
-
 const App = () => {
   const courses = [
     {
@@ -75,7 +58,6 @@ const App = () => {
     <div>
       <h1>Web development curriculum</h1>
       {mapCourses()}
-			{/* <Courses courses={courses} /> */}
     </div>
   )
 }
