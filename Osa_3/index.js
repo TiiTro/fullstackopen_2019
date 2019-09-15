@@ -21,6 +21,11 @@ let persons = [
 		name: "Mary Poppendieck",
     number: "39-23-6423122",
     id: 4
+	},
+	{
+		name: "Mary Poppins",
+    number: "39-23-6422122",
+    id: 5
 	}
 ]
 
@@ -28,8 +33,16 @@ app.get('/', (req, res) => {
 	res.send('<h1>Home</h1>')
 })
 
+app.get('/info', (req, res) => {
+	const numberOfPersons = persons.length
+	const timeStamp = new Date();
+
+	res.send(`<p>Phonebook has info for ${numberOfPersons} people</p>
+		<p>${timeStamp}</p>`)
+})
+
 app.get('/api', (req, res) => {
-	res.send('<h1>Phonebook</h1>')
+	res.send(`<h1>Api</h1>`)
 })
 
 app.get('/api/persons', (req, res) => {
