@@ -74,8 +74,20 @@ app.post('/api/persons/', (req, res) => {
 	const newId = Math.floor(Math.random() * 10000)
 
 	const person = req.body
-
 	person.id = newId
+
+	const dublicatePersons = persons.find(p => p.name === person.name)
+	console.log(person.name)
+
+	if(!person.name || !person.number) {
+		return res.status(400).json({
+			error: 'Missing content'
+		})
+	} else if (dublicatePersons) {
+		return res.status(400).json({
+			error: 'Person already added'
+		})
+	}
 
 	persons = persons.concat(person)
 
